@@ -20,25 +20,9 @@ from shapely.geometry import Point
 
 
 
-def extract_code(partId,part):
-  if partId==0:
-    next(part)
-  for record in csv.reader(part):
-    placekey,code=record[0],record[9]
-    s_code=str(code)
-
-    if s_code.startswith('4451'):
-      yield placekey
-    
-    
-sc = SparkContext()
-
-filter1 = sc.textFile('/tmp/bdm/core-places-nyc/*')
-
-sp_list=filter1.mapPartitionsWithIndex(extract_code).collect()
-
 #nyc_supermarkets=pd.read_csv('nyc_supermarkets.csv')
 nyc_cbg=pd.read_csv('nyc_cbg_centroids.csv')
+core_places=pd.read_csv('/tmp/bdm/core-places-nyc/*')
 
 #markets_list_sg=nyc_supermarkets['safegraph_placekey']
 #markets_list_sg=set(markets_list_sg)
@@ -47,6 +31,9 @@ cbg_list=nyc_cbg['cbg_fips'].astype(str)
 cbg_list=list(cbg_list)
 
 cbg_dic=nyc_cbg.set_index('cbg_fips').to_dict()
+
+core_places['flag']=core_places['naics_code'].apply(lambda x : 1 if str(x).startswith('4451') else 0)
+sp_list=list(core_places[core_places['flag']==1]['placekey'])
 
 
 def to_list(a):
@@ -159,7 +146,7 @@ def calculate_avg(partId,part):
 if __name__=='__main__':
 
     sys.argv[1]='BDM_Final'
-
+    sc = SparkContext()
     rdd = sc.textFile('/tmp/bdm/weekly-patterns-nyc-2019-2020/*')
 
 
