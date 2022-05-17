@@ -160,7 +160,7 @@ def calculate_avg(partId,part):
 if __name__=='__main__':
 
     
-    rdd = sc.textFile('/content/weekly-patterns-nyc-2019-2020-sample.csv')
+    rdd = sc.textFile('/tmp/bdm/weekly-patterns-nyc-2019-2020/*')
 
 
 
