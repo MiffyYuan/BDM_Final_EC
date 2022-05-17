@@ -22,7 +22,7 @@ from shapely.geometry import Point
 
 #nyc_supermarkets=pd.read_csv('nyc_supermarkets.csv')
 nyc_cbg=pd.read_csv('nyc_cbg_centroids.csv')
-core_places=pd.read_csv('/tmp/bdm/core-places-nyc/*')
+core_places=pd.read_csv('/tmp/bdm/core-places-nyc.csv')
 
 #markets_list_sg=nyc_supermarkets['safegraph_placekey']
 #markets_list_sg=set(markets_list_sg)
