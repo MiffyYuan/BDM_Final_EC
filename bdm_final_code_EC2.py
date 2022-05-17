@@ -18,6 +18,19 @@ from pyproj import Transformer
 import shapely
 from shapely.geometry import Point
 
+
+
+def extract_code(partId,part):
+  if partId==0:
+    next(part)
+  for record in csv.reader(part):
+    placekey,code=record[0],record[9]
+    s_code=str(code)
+
+    if s_code.startswith('4451'):
+      yield placekey
+    
+    
 sc = SparkContext()
 
 filter1 = sc.textFile('/tmp/bdm/core-places-nyc/*')
@@ -141,15 +154,6 @@ def calculate_avg(partId,part):
     yield key[0],key[1],avg
 
 
-def extract_code(partId,part):
-  if partId==0:
-    next(part)
-  for record in csv.reader(part):
-    placekey,code=record[0],record[9]
-    s_code=str(code)
-
-    if s_code.startswith('4451'):
-      yield placekey
 
 
 if __name__=='__main__':
